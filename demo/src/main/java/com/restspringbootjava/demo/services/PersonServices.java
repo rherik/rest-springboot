@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.restspringbootjava.demo.data.vo.v1.PersonVO;
+import com.restspringbootjava.demo.data.vo.v2.PersonVOV2;
 import com.restspringbootjava.demo.exceptions.ResourceNotFoundException;
 import com.restspringbootjava.demo.mapper.DozerMapper;
+import com.restspringbootjava.demo.mapper.custom.PersonMapper;
 import com.restspringbootjava.demo.model.Person;
 import com.restspringbootjava.demo.repositories.PersonRepository;
 
@@ -20,9 +22,12 @@ public class PersonServices {
     @Autowired
     PersonRepository repository;
     
+    @Autowired
+    PersonMapper mapper;
+    
     public List<PersonVO> findAll() {
         logger.info("Finding all people");
-        return DozerMapper.parseListObject(repository.findAll(null, null), PersonVO.class);
+        return DozerMapper.parseListObject(repository.findAll(), PersonVO.class);
     }
 
     public PersonVO findById(Long id) {
@@ -33,11 +38,20 @@ public class PersonServices {
     }
 
     public PersonVO create(PersonVO person){
-    logger.info("Creating one person.");
-    var entity = DozerMapper.parseObject(person, Person.class);
-    var vo = DozerMapper.parseObject(repository.save(entity), PersonVO.class);
-    return vo;
+        logger.info("Creating one person.");
+        var entity = DozerMapper.parseObject(person, Person.class);
+        var vo = DozerMapper.parseObject(repository.save(entity), PersonVO.class);
+        return vo;
     }
+
+    public PersonVOV2 createV2(PersonVOV2 person){
+        logger.info("Creating one person with V2.");
+        var entity = mapper.converVoToEntity(person);
+        var vo = mapper.converEntityToVo(repository.save(entity));
+        return vo;
+    }
+
+
     public PersonVO update(PersonVO person){
     logger.info("Updating one person.");
     var entity = repository.findById(person.getId())

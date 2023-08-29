@@ -1,33 +1,29 @@
-package com.restspringbootjava.demo.model;
+package com.restspringbootjava.demo.data.vo.v2;
 
 import java.io.Serializable;
+import java.util.Date;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
-@Entity
-@Table(name = "person")
-public class Person implements Serializable {
+public class PersonVOV2 implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "first_name", nullable = false, length = 80)
     private String firstName;
-    @Column(name = "last_name", nullable = false, length = 80)
     private String lastName;
-    @Column(nullable = false, length = 100)
     private String address;
-    @Column(nullable = false, length = 6)
     private String gender;
+    private Date birthDay;
 
-    public Person(){}
+
+    public Date getBirthDay() {
+        return birthDay;
+    }
+
+    public void setBirthDay(Date birthDay) {
+        this.birthDay = birthDay;
+    }
+
+    public PersonVOV2(){}
 
     public Long getId() {
         return id;
@@ -69,7 +65,6 @@ public class Person implements Serializable {
         this.gender = gender;
     }
 
-
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -79,6 +74,7 @@ public class Person implements Serializable {
         result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
         result = prime * result + ((address == null) ? 0 : address.hashCode());
         result = prime * result + ((gender == null) ? 0 : gender.hashCode());
+        result = prime * result + ((birthDay == null) ? 0 : birthDay.hashCode());
         return result;
     }
 
@@ -90,7 +86,7 @@ public class Person implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Person other = (Person) obj;
+        PersonVOV2 other = (PersonVOV2) obj;
         if (id == null) {
             if (other.id != null)
                 return false;
@@ -115,6 +111,11 @@ public class Person implements Serializable {
             if (other.gender != null)
                 return false;
         } else if (!gender.equals(other.gender))
+            return false;
+        if (birthDay == null) {
+            if (other.birthDay != null)
+                return false;
+        } else if (!birthDay.equals(other.birthDay))
             return false;
         return true;
     }
